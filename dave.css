@@ -1,0 +1,187 @@
+/* the page of the browser build; see shell.js for the sizes */
+
+* { box-sizing: border-box; }
+
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100dvh;
+	background: #111;
+	color: #bbb;
+	font: 14px/1.4 system-ui, sans-serif;
+}
+
+/* the game: everything the footer leaves */
+#stage {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: #000;
+	position: relative;
+	overflow: hidden;
+}
+
+#screen {
+	position: relative;
+	line-height: 0;
+}
+
+/*
+** The canvas always has 320 * 200 pixels.  shell.js gives it a size in
+** CSS pixels (4:3, so the pixels become 1.2 times as tall as wide, like
+** on the monitors the game was made for) and the browser enlarges it
+** without smoothing.
+*/
+#canvas {
+	display: block;
+	width: 320px;
+	height: 240px;
+	background: #000;
+	outline: none;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+
+#overlay {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em;
+	border: 0;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	font: inherit;
+	font-size: 18px;
+	line-height: 1.4;
+	cursor: pointer;
+}
+
+#overlay[hidden] { display: none; }
+
+footer {
+	flex: 0 0 auto;
+	padding: 8px 12px;
+	text-align: center;
+}
+
+footer p {
+	margin: 6px auto 0;
+	max-width: 60em;
+}
+
+#controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+	align-items: center;
+	justify-content: center;
+}
+
+#controls label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+button, kbd {
+	font: inherit;
+	color: #ddd;
+	background: #2a2a2a;
+	border: 1px solid #555;
+	border-radius: 4px;
+}
+
+button {
+	padding: 4px 10px;
+	cursor: pointer;
+}
+
+button:hover { background: #3a3a3a; }
+
+#controls button[aria-pressed="false"] { color: #999; }
+
+kbd {
+	padding: 0 5px;
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+#note {
+	font-size: 12px;
+	color: #888;
+}
+
+/* buttons for screens without keys: a row of keys, under it the arrows
+   on the left and the two buttons on the right */
+#touch {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-areas: "keys keys keys" "arrows . buttons";
+	gap: 10px 8px;
+	align-items: end;
+	width: 100%;
+	max-width: 560px;
+	padding: 8px;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+#touch[hidden] { display: none; }
+
+#touch .pad {
+	display: grid;
+	gap: 6px;
+}
+
+#touch .keys {
+	grid-area: keys;
+	grid-template-columns: repeat(4, auto);
+	justify-content: center;
+}
+
+#touch .arrows {
+	grid-area: arrows;
+	grid-template-columns: repeat(3, 48px);
+}
+
+#touch .buttons {
+	grid-area: buttons;
+	grid-template-columns: repeat(2, 60px);
+}
+
+#touch button {
+	height: 48px;
+	padding: 0 8px;
+	font-size: 18px;
+	touch-action: none;
+}
+
+#touch .keys button {
+	height: 34px;
+	min-width: 48px;
+	font-size: 13px;
+}
+
+#touch button.down { background: #666; }
+
+body.touch #legend { display: none; }
+
+/* full screen: only the game */
+#stage:fullscreen { width: 100vw; height: 100vh; }
+
+@media (max-height: 520px) {
+	#note, #legend { display: none; }
+}

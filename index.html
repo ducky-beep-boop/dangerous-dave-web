@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dangerous Dave - reconstruction build</title>
+<link rel="stylesheet" href="dave.css">
+</head>
+<body>
+
+<main id="stage">
+  <div id="screen">
+    <!-- 320 * 200 pixels, always; dave.css and shell.js scale it -->
+    <canvas id="canvas" width="320" height="200" tabindex="0"
+            aria-label="Dangerous Dave"></canvas>
+    <button id="overlay" type="button">Loading ...</button>
+  </div>
+
+  <div id="touch" hidden>
+    <div class="pad keys">
+      <button type="button" data-keys="1">Esc</button>
+      <button type="button" data-keys="21">Y</button>
+      <button type="button" data-keys="49">N</button>
+      <button type="button" data-keys="28">Enter</button>
+    </div>
+    <div class="pad arrows">
+      <button type="button" data-keys="72 75" aria-label="jump left">&#8598;</button>
+      <button type="button" data-keys="72" aria-label="up">&#8593;</button>
+      <button type="button" data-keys="72 77" aria-label="jump right">&#8599;</button>
+      <button type="button" data-keys="75" aria-label="left">&#8592;</button>
+      <button type="button" data-keys="80" aria-label="down">&#8595;</button>
+      <button type="button" data-keys="77" aria-label="right">&#8594;</button>
+    </div>
+    <div class="pad buttons">
+      <button type="button" data-keys="56">Jet</button>
+      <button type="button" data-keys="29">Fire</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div id="controls">
+    <button id="mute" type="button" aria-pressed="false">Sound on</button>
+    <label>Volume <input id="volume" type="range" min="0" max="100" step="5" value="50"></label>
+    <button id="aspect" type="button" aria-pressed="true" title="320 * 200 as a 4:3 monitor showed it, or with square pixels">4:3</button>
+    <button id="fullscreen" type="button">Full screen</button>
+  </div>
+  <p id="legend">
+    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> move
+    <kbd>&uarr;</kbd> jump
+    <kbd>Ctrl</kbd> / <kbd>Z</kbd> / <kbd>Space</kbd> fire
+    <kbd>Alt</kbd> / <kbd>X</kbd> jetpack
+    <kbd>F1</kbd> help
+    <kbd>F2</kbd> control panel
+    <kbd>F3</kbd> restart
+    <kbd>F9</kbd> pause
+    <kbd>F10</kbd> / <kbd>Esc</kbd> quit
+  </p>
+  <p id="note">
+    Dangerous Dave (John Romero, 1990). This is a reconstruction build: the
+    game's source code was rebuilt from the DOS program and is compiled here
+    for the browser. High scores are kept in this browser.
+  </p>
+</footer>
+
+<script src="shell.js"></script>
+<script async src="dave.js"></script>
+</body>
+</html>
