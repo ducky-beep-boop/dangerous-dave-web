@@ -13,6 +13,9 @@
 **	&seed=N		the "time" that picks the demos (davehl: 0)
 **	&turbo=1	do not wait for the clock (and no sound)
 **	&touch=1	show the touch buttons
+**	&cheat=LIST	modifiers: gun,exit,lives,jetpack (or all, none),
+**			instead of the remembered checkboxes; LIST@FRAME
+**			sets them when that frame is shown
 */
 
 'use strict';
@@ -33,7 +36,7 @@
 
 	/* ---- settings, kept between visits ---- */
 
-	var settings = { volume: 50, mute: false, aspect: true };
+	var settings = { volume: 50, mute: false, aspect: true, cheats: 0 };
 
 	try {
 		var saved = JSON.parse(localStorage.getItem('dave:settings'));
@@ -42,12 +45,19 @@
 				settings.volume = Math.max(0, Math.min(100, Math.round(saved.volume)));
 			settings.mute = !!saved.mute;
 			settings.aspect = saved.aspect !== false;
+			if (typeof saved.cheats === 'number')
+				settings.cheats = saved.cheats & 15;
 		}
 	} catch (e) {}
 
 	function saveSettings() {
+		var kept = { volume: settings.volume, mute: settings.mute,
+			aspect: settings.aspect };
+
+		if (settings.cheats)		/* modifiers only if there are any */
+			kept.cheats = settings.cheats;
 		try {
-			localStorage.setItem('dave:settings', JSON.stringify(settings));
+			localStorage.setItem('dave:settings', JSON.stringify(kept));
 		} catch (e) {}
 	}
 
@@ -184,6 +194,56 @@
 	if (!stage.requestFullscreen)
 		fullscreenButton.hidden = true;
 
+	/* ---- modifiers of the game's rules ---- */
+
+	/*
+	** Four checkboxes, each one bit of the set the backend takes
+	** (DAVE_CHEAT_... in port/platform/backend.h).  The game starts
+	** with the remembered set (--cheat) and is told of every change
+	** (dave_web_cheats); it acts on it with its next frame.  ?cheat=
+	** in the address replaces the remembered set for this visit and
+	** is not remembered itself.
+	*/
+	var cheatBoxes = document.querySelectorAll('#modifiers input');
+	var cheats = settings.cheats;
+	var cheatQuery = query.get('cheat');
+
+	function cheatNames(mask) {
+		var names = [];
+		Array.prototype.forEach.call(cheatBoxes, function (box) {
+			if (mask & Number(box.getAttribute('data-cheat')))
+				names.push(box.getAttribute('data-name'));
+		});
+		return names.join(',') || 'none';
+	}
+
+	if (cheatQuery !== null) {
+		cheats = 0;
+		if (cheatQuery.indexOf('@') < 0)
+			cheatQuery.split(',').forEach(function (name) {
+				Array.prototype.forEach.call(cheatBoxes, function (box) {
+					if (name === 'all' || name === box.getAttribute('data-name'))
+						cheats |= Number(box.getAttribute('data-cheat'));
+				});
+			});
+	}
+
+	Array.prototype.forEach.call(cheatBoxes, function (box) {
+		var bit = Number(box.getAttribute('data-cheat'));
+
+		box.checked = (cheats & bit) !== 0;
+		box.addEventListener('change', function () {
+			cheats = box.checked ? cheats | bit : cheats & ~bit;
+			if (running)
+				call('dave_web_cheats', cheats);
+			else	/* not started yet: it starts with this set */
+				args[cheatArg] = cheatNames(cheats);
+			settings.cheats = cheats;
+			saveSettings();
+			canvas.focus();
+		});
+	});
+
 	/* ---- keys ---- */
 
 	/*
@@ -243,6 +303,8 @@
 		args.push('--seed', query.get('seed'));
 	if (query.get('turbo') === '1')
 		args.push('--turbo');
+	args.push('--cheat', cheatQuery !== null ? cheatQuery : cheatNames(cheats));
+	var cheatArg = args.length - 1;
 
 	window.Module = {
 		canvas: canvas,

@@ -95,6 +95,48 @@ footer p {
 	gap: 6px;
 }
 
+/* the modifiers of the game's rules: a row of checkboxes that wraps */
+#modifiers {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 16px;
+	align-items: center;
+	justify-content: center;
+	max-width: 60em;
+	margin: 8px auto 0;
+	padding: 4px 10px 6px;
+	border: 1px solid #333;
+	border-radius: 4px;
+}
+
+#modifiers legend {
+	padding: 0 6px;
+	font-size: 12px;
+	color: #888;
+}
+
+#modifiers label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 28px;	/* a finger finds it */
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+#modifiers input {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	accent-color: #999;
+}
+
+#modifiers small {
+	flex-basis: 100%;
+	font-size: 12px;
+	color: #888;
+}
+
 button, kbd {
 	font: inherit;
 	color: #ddd;
@@ -183,5 +225,5 @@ body.touch #legend { display: none; }
 #stage:fullscreen { width: 100vw; height: 100vh; }
 
 @media (max-height: 520px) {
-	#note, #legend { display: none; }
+	#note, #legend, #modifiers small { display: none; }
 }
