@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super Dangerous Dave</title>
+<link rel="stylesheet" href="dave.css">
+</head>
+<body>
+
+<main id="stage">
+  <div id="screen">
+    <!-- 320 * 200 pixels, always; dave.css and shell.js scale it -->
+    <canvas id="canvas" width="320" height="200" tabindex="0"
+            aria-label="Super Dangerous Dave"></canvas>
+    <button id="overlay" type="button">Loading ...</button>
+  </div>
+
+  <div id="touch" hidden>
+    <div class="pad keys">
+      <button type="button" data-keys="1">Esc</button>
+      <button type="button" data-keys="21">Y</button>
+      <button type="button" data-keys="49">N</button>
+      <button type="button" data-keys="28">Enter</button>
+    </div>
+    <div class="pad arrows">
+      <button type="button" data-keys="72 75" aria-label="jump left">&#8598;</button>
+      <button type="button" data-keys="72" aria-label="up">&#8593;</button>
+      <button type="button" data-keys="72 77" aria-label="jump right">&#8599;</button>
+      <button type="button" data-keys="75" aria-label="left">&#8592;</button>
+      <button type="button" data-keys="80" aria-label="down">&#8595;</button>
+      <button type="button" data-keys="77" aria-label="right">&#8594;</button>
+    </div>
+    <div class="pad buttons">
+      <!-- 42 = left Shift: time runs backwards while held; with 15 (Tab) twice as fast -->
+      <button type="button" data-keys="42 15" aria-label="rewind fast" title="Rewind, twice as fast">&laquo;&laquo;</button>
+      <button type="button" data-keys="42" aria-label="rewind" title="Hold: time runs backwards">&laquo;</button>
+      <button type="button" data-keys="56">Jet</button>
+      <button type="button" data-keys="29">Fire</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div id="controls">
+    <button id="mute" type="button" aria-pressed="false">Sound on</button>
+    <label>Volume <input id="volume" type="range" min="0" max="100" step="5" value="50"></label>
+    <button id="aspect" type="button" aria-pressed="true" title="320 * 200 as a 4:3 monitor showed it, or with square pixels">4:3</button>
+    <button id="fullscreen" type="button">Full screen</button>
+  </div>
+  <fieldset id="game">
+    <legend>Game</legend>
+    <label>Levels
+      <select id="levelset" title="Which ten levels: the new ones, or the ten of 1990">
+        <option value="super">Super (ten new levels)</option>
+        <option value="classic">Classic (the 1990 levels)</option>
+      </select>
+    </label>
+    <label>Start at level
+      <select id="startlevel" title="On the title screen: start a game at this level (also the keys 1-9 and 0)">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      </select>
+    </label>
+    <button id="start" type="button" title="Press the level's digit key on the title screen">Start</button>
+    <small>The level set and a start level take effect with the next game (press Start on the title screen, or a digit key there). Scores count as always.</small>
+  </fieldset>
+  <fieldset id="twists">
+    <legend>Twists</legend>
+    <label title="Monsters and their shots keep moving forwards while you rewind: you must rewind far enough to get out of their way. They wear a pulsing aura, and keep their colours while the picture is sepia."><input type="checkbox" data-twist="immune"> Rewind-immune monsters</label>
+    <label title="After a rewind, the Dave of the time line you discarded replays as a translucent ghost, for as long as it lasted. Visual only."><input type="checkbox" data-twist="ghost"> Ghost of the discarded run</label>
+    <label title="Frames since the level started, as m:ss.ff in the bottom left corner; rewinding counts it back. The best time of each level is kept in this browser and shown after the door."><input type="checkbox" data-twist="timer"> Level timer and best times</label>
+    <small>Immune monsters: the monsters go on while time runs backwards, so a collision cannot simply be undone.
+    Ghost: your discarded attempt replays as a see-through Dave.
+    Timer: the level's time, rewinding counts it back; best times are kept in this browser.
+    Defaults: all three for the Super levels, ghost and timer for the Classic ones.</small>
+  </fieldset>
+  <fieldset id="modifiers">
+    <legend>Modifiers</legend>
+    <label><input type="checkbox" data-cheat="1" data-name="gun"> Own a gun</label>
+    <label><input type="checkbox" data-cheat="2" data-name="exit"> Exit unlocked</label>
+    <label><input type="checkbox" data-cheat="4" data-name="lives"> Unlimited lives</label>
+    <label><input type="checkbox" data-cheat="8" data-name="jetpack"> Jetpack always fuelled</label>
+    <button id="skip" type="button" title="End the level as the door does">Skip level</button>
+    <small>These change the original game's rules; scores made with them still count.</small>
+  </fieldset>
+  <p id="legend">
+    <kbd>Shift</kbd> hold: time runs backwards
+    <kbd>Shift</kbd>+<kbd>Tab</kbd> twice as fast
+    <kbd>1</kbd>-<kbd>9</kbd> <kbd>0</kbd> on the title: start at that level
+    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> move
+    <kbd>&uarr;</kbd> jump
+    <kbd>Ctrl</kbd> / <kbd>Z</kbd> / <kbd>Space</kbd> fire
+    <kbd>Alt</kbd> / <kbd>X</kbd> jetpack
+    <kbd>F1</kbd> help
+    <kbd>F2</kbd> control panel
+    <kbd>F3</kbd> restart
+    <kbd>F9</kbd> pause
+    <kbd>F10</kbd> / <kbd>Esc</kbd> quit
+  </p>
+  <p id="note">
+    <strong>What is this?</strong> Super Dangerous Dave is a modified build
+    of the reconstruction of Dangerous Dave (John Romero, Softdisk, 1990):
+    the game's source code was rebuilt from the DOS program, compiled for
+    the browser, and given ten new levels and time that runs backwards.
+    Hold Shift and everything that happened happens in reverse - Dave,
+    monsters, shots, pick-ups, the score, even a death and the restart -
+    back to the start of the level and the levels before it; let go and
+    play goes on from there. The ten levels of 1990 are still here as the
+    Classic set. High scores and best times are kept in this browser.
+    <a href="../">The plain game</a>.
+  </p>
+</footer>
+
+<script src="shell.js"></script>
+<script src="super.js"></script>
+<script async src="dave.js"></script>
+</body>
+</html>

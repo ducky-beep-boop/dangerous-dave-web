@@ -5,6 +5,9 @@ made from a source reconstruction of the original DOS game.
 
 Play: https://ducky-beep-boop.github.io/dangerous-dave-web/
 
+Super Dangerous Dave (new levels, Braid-style rewind, twists):
+https://ducky-beep-boop.github.io/dangerous-dave-web/super/
+
 Controls: arrows move, Ctrl / Z / Space fire, Alt / X jetpack, F1 help,
 F2 control panel, F3 restart, F9 pause, F10 or Esc quit.
 
