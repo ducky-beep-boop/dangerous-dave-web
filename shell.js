@@ -16,6 +16,7 @@
 **	&cheat=LIST	modifiers: gun,exit,lives,jetpack (or all, none),
 **			instead of the remembered checkboxes; LIST@FRAME
 **			sets them when that frame is shown
+**	&skip=F,...	"Skip level" at those frames; &rewind=F,... "Back 5 s"
 */
 
 'use strict';
@@ -244,6 +245,26 @@
 		});
 	});
 
+	/* the "Skip level" button: the game ends the level with its next
+	   frame, as the door would; outside a game the press is ignored */
+	document.getElementById('skip').addEventListener('click', function () {
+		call('dave_web_skip_level');
+		canvas.focus();
+	});
+
+	/* "Back 5 s": the game goes back to a snapshot (platform/rewind.c);
+	   outside a game the press is forgotten after two seconds.  Also
+	   the R key, which the game has no use for in a level */
+	document.getElementById('rewind').addEventListener('click', function () {
+		call('dave_web_rewind');
+		canvas.focus();
+	});
+	window.addEventListener('keydown', function (e) {
+		if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.altKey
+			&& document.activeElement === canvas)
+			call('dave_web_rewind');
+	}, true);
+
 	/* ---- keys ---- */
 
 	/*
@@ -303,6 +324,12 @@
 		args.push('--seed', query.get('seed'));
 	if (query.get('turbo') === '1')
 		args.push('--turbo');
+	(query.get('skip') || '').split(',').filter(Boolean).forEach(function (f) {
+		args.push('--skip-level', f);
+	});
+	(query.get('rewind') || '').split(',').filter(Boolean).forEach(function (f) {
+		args.push('--rewind', f);
+	});
 	args.push('--cheat', cheatQuery !== null ? cheatQuery : cheatNames(cheats));
 	var cheatArg = args.length - 1;
 
