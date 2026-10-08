@@ -67,10 +67,10 @@
   </fieldset>
   <fieldset id="twists">
     <legend>Twists</legend>
-    <label title="Monsters and their shots keep moving forwards while you rewind: you must rewind far enough to get out of their way. They wear a pulsing aura, and keep their colours while the picture is sepia."><input type="checkbox" data-twist="immune"> Rewind-immune monsters</label>
+    <label title="The monsters the level marks magic (green) and their shots keep moving forwards while you rewind: you must rewind far enough to get out of their way. They keep their colours while the picture is sepia. Off: no monster is magic."><input type="checkbox" data-twist="immune"> Magic (green) monsters ignore the rewind</label>
     <label title="After a rewind, the Dave of the time line you discarded replays as a translucent ghost, for as long as it lasted. Visual only."><input type="checkbox" data-twist="ghost"> Ghost of the discarded run</label>
     <label title="Frames since the level started, as m:ss.ff in the bottom left corner; rewinding counts it back. The best time of each level is kept in this browser and shown after the door."><input type="checkbox" data-twist="timer"> Level timer and best times</label>
-    <small>Immune monsters: the monsters go on while time runs backwards, so a collision cannot simply be undone.
+    <small>Magic monsters: the green monsters go on while time runs backwards, so a collision cannot simply be undone.
     Ghost: your discarded attempt replays as a see-through Dave.
     Timer: the level's time, rewinding counts it back; best times are kept in this browser.
     Defaults: all three for the Super levels, ghost and timer for the Classic ones.</small>
@@ -102,12 +102,17 @@
     <strong>What is this?</strong> Super Dangerous Dave is a modified build
     of the reconstruction of Dangerous Dave (John Romero, Softdisk, 1990):
     the game's source code was rebuilt from the DOS program, compiled for
-    the browser, and given ten new levels and time that runs backwards.
+    the browser, and given time that runs backwards.
     Hold Shift and everything that happened happens in reverse - Dave,
     monsters, shots, pick-ups, the score, even a death and the restart -
     back to the start of the level and the levels before it; let go and
-    play goes on from there. The ten levels of 1990 are still here as the
-    Classic set. High scores and best times are kept in this browser.
+    play goes on from there. One thing does not: <strong>anything that
+    glows green is magic and ignores time</strong> - green platforms keep
+    moving while you rewind, green items stay taken (a trophy at the
+    bottom of a pit: drop in, take it, rewind out), green monsters keep
+    coming. The Super set is the ten levels of 1990 remixed around that
+    (level 1 is the tutorial); the untouched ten are the Classic set. High
+    scores and best times are kept in this browser.
     <a href="../">The plain game</a>.
   </p>
 </footer>
